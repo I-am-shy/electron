@@ -1,13 +1,38 @@
 {
   "name": "my-electron-app",
   "version": "1.0.0",
-  "description": "Hello World!",
+  "description": "第一个 Electron 应用",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac"
   },
-
+  "build": {
+    "appId": "com.my-electron-app.app",
+    "productName": "第一个 Electron 应用",
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "dist/**/*",
+      "src/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "target": ["dmg","zip"],
+      "icon":"public/icon.png"
+    },
+    "win": {
+      "target": ["nsis","portable"],
+      "icon":"public/icon.png"
+    }
+  },
   "devDependencies": {
-    "electron": "^39.2.5"
+    "electron": "^39.2.5",
+    "electron-builder": "^26.0.12"
   }
 }

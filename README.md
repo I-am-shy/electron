@@ -2,7 +2,19 @@
 
 ## 核心概念
 
-![](https://cn.electron-vite.org/electron-processes.png)
+```mermaid
+sequenceDiagram
+renderer->>+preload: 读取文件系统数据
+preload->>-renderer: 返回数据
+renderer->>preload: 最大化窗口
+activate preload
+preload-->>main: 调用 IPC 命令
+activate main
+main-->>preload: IPC 响应
+deactivate main
+preload->>renderer: 窗口最大化
+deactivate preload
+```
 
 
 1. main.js - （main）主进程
@@ -37,7 +49,65 @@ electron 的入口文件，负责管理应用的生命周期和创建窗口，�
 
 electron 的配置文件，负责配置应用的名称、版本、描述等信息。需要在 main 字段指定入口文件。
 
+## 打包配置说明
+
+```json
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    // 基础打包（根据当前系统自动打包对应平台）
+    "build": "electron-builder",
+    // 仅打包未压缩的目录（测试用，速度快）
+    "pack": "electron-builder --dir",
+    // Windows 打包（可指定安装包类型）
+    "build:win": "electron-builder --win",
+    // macOS 打包
+    "build:mac": "electron-builder --mac",
+    // Linux 打包
+    "build:linux": "electron-builder --linux",
+    // 全平台打包（需对应系统环境/跨平台配置）
+    "build:all": "electron-builder --win --mac --linux",
+    // 打包并跳过代码签名（开发测试用）
+    "build:unsigned": "electron-builder --win --config.artifactName=${productName}-${version}-${arch}.${ext} --publish never",
+    // 打包后自动发布（如 GitHub Releases）
+    "build:publish": "electron-builder --publish always"
+  },
+  "build": {
+    "appId": "com.my-electron-app.app", // 唯一标识（反向域名格式）
+    "productName": "我的Electron应用", // 应用名称
+    "directories": {
+      "output": "dist" // 打包输出目录
+    },
+    "files": [ // 需打包的文件（默认包含根目录，可排除）
+      "dist/**/*",
+      "src/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "mac": { // macOS 配置
+      "target": ["dmg", "zip"], // 输出格式：dmg（安装包）+ zip（免安装）
+      "icon": "assets/icon.icns" // 应用图标
+    },
+    "win": { // Windows 配置
+      "target": ["nsis", "portable"], // nsis（安装包）+ portable（免安装）
+      "icon": "assets/icon.ico"
+    },
+    "linux": { // Linux 配置
+      "target": ["deb", "AppImage"],
+      "icon": "assets/icon.png"
+    }
+  }
+}
+```
+
+关键配置说明：
+- files：指定需要打包的文件，支持 ! 排除（如 "!node_modules/**/*.md"）；
+- asar：默认 true，将代码打包为 asar 文件（防止源码暴露）；
+- publish：配置自动更新源（如 GitHub Releases、私有服务器）。
 
 ## 参考文档
 
 [Electron 官方文档](https://www.electronjs.org/zh/docs/latest/)
+[Electron Builder 官方文档](https://www.electron.build/)
