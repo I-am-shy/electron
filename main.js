@@ -10,11 +10,12 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      webSecurity: true
+      webSecurity: true,
+      preload: path.resolve(__dirname, 'src/preload/preload.js')
     }
   })
   // 使用绝对路径加载index.html ，使用相对路径打包后的应用会无法找到index.html
-  win.loadFile(path.join(__dirname, 'index.html'))
+  win.loadFile(path.resolve(__dirname, 'src/view/index.html'))
 }
 
 (async () => { 

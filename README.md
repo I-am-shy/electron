@@ -37,3 +37,7 @@ electron 的入口文件，负责管理应用的生命周期和创建窗口，�
 
 electron 的配置文件，负责配置应用的名称、版本、描述等信息。需要在 main 字段指定入口文件。
 
+
+## 参考文档
+
+[Electron 官方文档](https://www.electronjs.org/zh/docs/latest/)
