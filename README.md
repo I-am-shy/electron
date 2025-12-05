@@ -109,5 +109,5 @@ electron 的配置文件，负责配置应用的名称、版本、描述等信�
 
 ## 参考文档
 
-[Electron 官方文档](https://www.electronjs.org/zh/docs/latest/)
-[Electron Builder 官方文档](https://www.electron.build/)
+- [Electron 官方文档](https://www.electronjs.org/zh/docs/latest/)
+- [Electron Builder 官方文档](https://www.electron.build/)
